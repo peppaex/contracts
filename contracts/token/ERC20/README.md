@@ -13,6 +13,8 @@ There a few core contracts that implement the behavior specified in the EIP:
 
 Additionally there are multiple custom extensions, including:
 
+* {ERC20FixedSupply}: 固定总量的令牌
+* {ERC20Mintable}: 可以增发的令牌
 * {ERC20Burnable}: 可以销毁自己的令牌.
 * {ERC20Snapshot}: 有效存储过去的令牌余额，以便以后随时查询.
 * {ERC20Permit}: 节省gas的授权方法 (ERC2612标准).
@@ -20,6 +22,7 @@ Additionally there are multiple custom extensions, including:
 * {ERC20Votes}: 支持投票和投票委托.
 * {ERC20VotesComp}: 支持投票和投票委托（兼容 Compound 的 token，有 uint96 限制）.
 * {ERC20Wrapper}: 包装器创建一个由另一个 ERC20 支持的 ERC20，具有存款和取款方法。 与 {ERC20Votes} 结合使用很有用.
+* {ERC20SaveToken} 拯救令牌的方法
 
 Finally, there are some utilities to interact with ERC20 contracts in various ways.
 

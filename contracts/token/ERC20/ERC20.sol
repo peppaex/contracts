@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.0;
 
-import "./IERC20Metadata.sol";
+import "./interface/IERC20Metadata.sol";
 
 /**
  * @dev {IERC20} 接口的实现.
@@ -14,7 +14,7 @@ import "./IERC20Metadata.sol";
  * 监听这个事件来重建所有帐户的限额。 EIP的其他实现可能不会发出这些事件，因为规范
  * 中并没有要求必须这样做
  */
-contract ERC20 is IERC20, IERC20Metadata {
+contract ERC20 is IERC20Metadata {
     /// @dev 余额映射(地址=>数额)
     mapping(address => uint256) public override balanceOf;
     /// @dev 授权映射(授权地址=>被授权地址=>数额)
