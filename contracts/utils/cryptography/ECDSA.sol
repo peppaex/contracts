@@ -21,7 +21,11 @@ library ECDSA {
      * - with https://web3js.readthedocs.io/en/v1.3.4/web3-eth-accounts.html#sign[Web3.js]
      * - with https://docs.ethers.io/v5/api/signer/#Signer-signMessage[ethers]
      */
-    function recover(bytes32 hash, bytes memory signature) internal pure returns (address) {
+    function recover(bytes32 hash, bytes memory signature)
+        internal
+        pure
+        returns (address)
+    {
         // 检查签名长度
         // - case 65: r,s,v signature (standard)
         // - case 64: r,vs signature (cf https://eips.ethereum.org/EIPS/eip-2098) _Available since v4.1._
@@ -67,7 +71,10 @@ library ECDSA {
         bytes32 s;
         uint8 v;
         assembly {
-            s := and(vs, 0x7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff)
+            s := and(
+                vs,
+                0x7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+            )
             v := add(shr(255, vs), 27)
         }
         return recover(hash, v, r, s);
@@ -82,7 +89,7 @@ library ECDSA {
         bytes32 r,
         bytes32 s
     ) internal pure returns (address) {
-        // EIP-2 仍然允许 ecrecover() 的签名延展性. 消除这种可能性并使签名唯一. 
+        // EIP-2 仍然允许 ecrecover() 的签名延展性. 消除这种可能性并使签名唯一.
         // 以太坊黄皮书 (https://ethereum.github.io/yellowpaper/paper.pdf) 中的附录 F,
         // 定义了 (301) 中 s 的有效范围：0 < s < secp256k1n ÷ 2 + 1，对于 v 在 (302): v ∈ {27, 28}.
         // 当前库中的大多数签名都会生成一个具有低半阶 s 值的唯一签名.
@@ -91,7 +98,8 @@ library ECDSA {
         // 请使用 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141 - s1 计算新的 s 值，
         // 并将 v 从 27 翻转到 28，反之亦然。 如果您的库还为 v 生成了 0/1 而不是 27/28 的签名，请将 27 添加到 v 以接受这些可延展的签名.
         require(
-            uint256(s) <= 0x7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF5D576E7357A4501DDFE92F46681B20A0,
+            uint256(s) <=
+                0x7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF5D576E7357A4501DDFE92F46681B20A0,
             "ECDSA: invalid signature 's' value"
         );
         require(v == 27 || v == 28, "ECDSA: invalid signature 'v' value");
@@ -104,15 +112,22 @@ library ECDSA {
     }
 
     /**
-     * @dev 返回从`hash`创建的以太坊签名消息. 
+     * @dev 返回从`hash`创建的以太坊签名消息.
      * 这会生成对应于使用 https://eth.wiki/json-rpc/API#eth_sign[`eth_sign`] JSON-RPC 方法签名的哈希，作为 EIP-191 的一部分.
      *
      * 参考 {recover}.
      */
-    function toEthSignedMessageHash(bytes32 hash) internal pure returns (bytes32) {
+    function toEthSignedMessageHash(bytes32 hash)
+        internal
+        pure
+        returns (bytes32)
+    {
         // 32 是哈希的字节长度,
         // 由上面的类型签名强制执行
-        return keccak256(abi.encodePacked("\x19Ethereum Signed Message:\n32", hash));
+        return
+            keccak256(
+                abi.encodePacked("\x19Ethereum Signed Message:\n32", hash)
+            );
     }
 
     /**
@@ -122,7 +137,14 @@ library ECDSA {
      *
      * 参考 {recover}.
      */
-    function toTypedDataHash(bytes32 domainSeparator, bytes32 structHash) internal pure returns (bytes32) {
-        return keccak256(abi.encodePacked("\x19\x01", domainSeparator, structHash));
+    function toTypedDataHash(bytes32 domainSeparator, bytes32 structHash)
+        internal
+        pure
+        returns (bytes32)
+    {
+        return
+            keccak256(
+                abi.encodePacked("\x19\x01", domainSeparator, structHash)
+            );
     }
 }

@@ -11,7 +11,7 @@ import "./ECDSA.sol";
  * 他们需要在他们的合约中使用 `abi.encode` 和 `keccak256` 的组合.
  *
  * 该合约实现了EIP712域分隔符({_domainSeparatorV4})，用作编码的一部分方案，
- * 以及编码的最后一步以获得消息摘要，然后通过 ECDSA 签名({_hashTypedDataV4}) 
+ * 以及编码的最后一步以获得消息摘要，然后通过 ECDSA 签名({_hashTypedDataV4})
  *
  * 域分隔符的实现旨在尽可能高效，同时仍能正确更新用于防止对链的最终分叉进行重放攻击的链ID。
  *
@@ -52,7 +52,11 @@ abstract contract EIP712 {
         _HASHED_NAME = hashedName;
         _HASHED_VERSION = hashedVersion;
         _CACHED_CHAIN_ID = block.chainid;
-        _CACHED_DOMAIN_SEPARATOR = _buildDomainSeparator(typeHash, hashedName, hashedVersion);
+        _CACHED_DOMAIN_SEPARATOR = _buildDomainSeparator(
+            typeHash,
+            hashedName,
+            hashedVersion
+        );
         _TYPE_HASH = typeHash;
     }
 
@@ -63,7 +67,12 @@ abstract contract EIP712 {
         if (block.chainid == _CACHED_CHAIN_ID) {
             return _CACHED_DOMAIN_SEPARATOR;
         } else {
-            return _buildDomainSeparator(_TYPE_HASH, _HASHED_NAME, _HASHED_VERSION);
+            return
+                _buildDomainSeparator(
+                    _TYPE_HASH,
+                    _HASHED_NAME,
+                    _HASHED_VERSION
+                );
         }
     }
 
@@ -72,7 +81,16 @@ abstract contract EIP712 {
         bytes32 nameHash,
         bytes32 versionHash
     ) private view returns (bytes32) {
-        return keccak256(abi.encode(typeHash, nameHash, versionHash, block.chainid, address(this)));
+        return
+            keccak256(
+                abi.encode(
+                    typeHash,
+                    nameHash,
+                    versionHash,
+                    block.chainid,
+                    address(this)
+                )
+            );
     }
 
     /**
@@ -89,7 +107,12 @@ abstract contract EIP712 {
      * address signer = ECDSA.recover(digest, signature);
      * ```
      */
-    function _hashTypedDataV4(bytes32 structHash) internal view virtual returns (bytes32) {
+    function _hashTypedDataV4(bytes32 structHash)
+        internal
+        view
+        virtual
+        returns (bytes32)
+    {
         return ECDSA.toTypedDataHash(_domainSeparatorV4(), structHash);
     }
 }
